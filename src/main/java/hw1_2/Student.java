@@ -15,7 +15,8 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 public class Student {
-
+    @Setter
+    StudentRepo repo;
     @Getter
     @Setter
     private String name;
@@ -31,11 +32,7 @@ public class Student {
 
     @SneakyThrows
     public void addGrade(int grade) {
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpGet request = new HttpGet("http://localhost:5352/checkGrade?grade="+grade);
-        CloseableHttpResponse httpResponse = httpClient.execute(request);
-        HttpEntity entity = httpResponse.getEntity();
-        if(!Boolean.parseBoolean(EntityUtils.toString(entity))){
+        if(!repo.checkGrade(grade)){
             throw new IllegalArgumentException(grade + " is wrong grade");
         }
         grades.add(grade);
